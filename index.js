@@ -1,16 +1,29 @@
 import express from 'express';
 import fs from 'fs';
 import chalk from 'chalk';
-import makeWASocket, {
+
+import * as Baileys from '@whiskeysockets/baileys';
+
+const makeWASocket =
+  Baileys.default || Baileys.makeWASocket;
+
+const {
   useMultiFileAuthState,
   Browsers,
   fetchLatestBaileysVersion
-} from '@whiskeysockets/baileys';
+} = Baileys;
+
 import pino from 'pino';
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+
+if (typeof makeWASocket !== 'function') {
+  throw new Error(
+    'Baileys import failed: makeWASocket is not a function. Check installed Baileys version.'
+  );
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
